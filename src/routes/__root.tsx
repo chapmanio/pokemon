@@ -35,7 +35,7 @@ function RootLayout() {
             <ArrowLeft className="size-6" />
           </button>
         )}
-        <h1 className="text-xl font-bold tracking-tight flex-1">Pokémon Assistant</h1>
+        <h1 className="text-xl font-bold tracking-tight flex-1">PokéAssist</h1>
       </header>
 
       <main className="flex-1 overflow-y-auto pt-14 pb-16 bg-slate-50">

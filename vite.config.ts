@@ -13,8 +13,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Pokémon Battle Assistant",
-        short_name: "Pokémon Assistant",
+        name: "PokéAssist",
+        short_name: "PokéAssist",
         description: "Battle prep companion for Pokémon games",
         theme_color: "#dc2626",
         background_color: "#ffffff",
@@ -26,11 +26,13 @@ export default defineConfig({
             src: "/pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "any maskable",
           },
           {
             src: "/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any maskable",
           },
         ],
       },

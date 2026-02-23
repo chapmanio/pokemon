@@ -1,4 +1,4 @@
-# Pokémon Battle Assistant PWA
+# PokéAssist PWA
 
 A mobile-first PWA companion for Pokémon games. Home is the Pokédex; Compare and Team Builder are sub-navigation. Designed for ages 9–11 with simple icons, percentages, and visual bars.
 
