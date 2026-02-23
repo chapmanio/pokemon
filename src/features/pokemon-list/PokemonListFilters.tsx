@@ -15,7 +15,7 @@ export function PokemonListFilters({
   resetVisible: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch">
       <label className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
         <span>Region</span>
         <select
@@ -24,7 +24,7 @@ export function PokemonListFilters({
             setRegionValue(e.target.value);
             resetVisible();
           }}
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {POKEDEX_REGIONS.map((r) => (
             <option key={r.value || "all"} value={r.value}>
@@ -43,6 +43,7 @@ export function PokemonListFilters({
         }}
         autoComplete="off"
         className="flex-1 min-w-0"
+        style={{ height: "2.5rem", minHeight: "2.5rem" }}
       />
     </div>
   );
