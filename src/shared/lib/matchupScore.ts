@@ -13,33 +13,42 @@ export function getStat(
 }
 
 /**
- * Simple matchup score 0-100: how favoured is B vs A?
- * Uses offensive score (B's attack vs A's defense) and defensive score (A's attack vs B's defense).
+ * Offensive pressure of attacker vs defender: attack × type effectiveness / defense.
+ * Higher = attacker hits harder relative to defender's bulk. Uses best attack and
+ * best defense (physical or special) as a simple proxy for "expected damage".
  */
-export function matchupScore(
+export function offensivePressure(
+  attacker: PokemonApiResponse,
+  defender: PokemonApiResponse,
+  typeChart: Record<string, TypeApiResponse>
+): number {
+  const atkTypes = attacker.types.map((t) => t.type.name);
+  const defTypes = defender.types.map((t) => t.type.name);
+
+  const atk = Math.max(getStat(attacker, "attack"), getStat(attacker, "special-attack"));
+  const def = Math.max(getStat(defender, "defense"), getStat(defender, "special-defense"));
+
+  let typeMult = 1;
+  for (const t of atkTypes) {
+    typeMult *= getDefenderMultiplier(t, defTypes, typeChart);
+  }
+
+  return (atk * typeMult) / (def || 1);
+}
+
+/**
+ * Chance (0–100) that A defeats B, based on each side's offensive pressure.
+ * Stats and type advantage both matter: e.g. Venusaur's higher stats can outweigh
+ * Charmander's fire advantage, so Venusaur still comes out ahead.
+ */
+export function chanceToDefeat(
   a: PokemonApiResponse,
   b: PokemonApiResponse,
   typeChart: Record<string, TypeApiResponse>
 ): number {
-  const aTypes = a.types.map((t) => t.type.name);
-  const bTypes = b.types.map((t) => t.type.name);
-
-  const bAtk = Math.max(getStat(b, "attack"), getStat(b, "special-attack"));
-  const aDef = Math.max(getStat(a, "defense"), getStat(a, "special-defense"));
-  const aAtk = Math.max(getStat(a, "attack"), getStat(a, "special-attack"));
-  const bDef = Math.max(getStat(b, "defense"), getStat(b, "special-defense"));
-
-  let bVsA = 1;
-  for (const bt of bTypes) {
-    bVsA *= getDefenderMultiplier(bt, aTypes, typeChart);
-  }
-  let aVsB = 1;
-  for (const at of aTypes) {
-    aVsB *= getDefenderMultiplier(at, bTypes, typeChart);
-  }
-
-  const offScore = bAtk * bVsA / (aDef || 1);
-  const defScore = bDef * aVsB / (aAtk || 1);
-  const raw = offScore / (offScore + defScore);
-  return Math.round(Math.min(100, Math.max(0, raw * 100)));
+  const powerA = offensivePressure(a, b, typeChart);
+  const powerB = offensivePressure(b, a, typeChart);
+  const total = powerA + powerB;
+  if (total === 0) return 50;
+  return Math.round(Math.min(100, Math.max(0, (100 * powerA) / total)));
 }
