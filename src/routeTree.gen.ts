@@ -13,7 +13,9 @@ import { Route as TeamRouteImport } from './routes/team'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as NameRouteImport } from './routes/$name'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TeamIndexRouteImport } from './routes/team.index'
 import { Route as CompareIndexRouteImport } from './routes/compare.index'
+import { Route as TeamViewRouteImport } from './routes/team.view'
 import { Route as ComparePokemonRouteImport } from './routes/compare.$pokemon'
 import { Route as ComparePokemonVsOpponentRouteImport } from './routes/compare.$pokemon.vs.$opponent'
 
@@ -37,10 +39,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamIndexRoute = TeamIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TeamRoute,
+} as any)
 const CompareIndexRoute = CompareIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => CompareRoute,
+} as any)
+const TeamViewRoute = TeamViewRouteImport.update({
+  id: '/view',
+  path: '/view',
+  getParentRoute: () => TeamRoute,
 } as any)
 const ComparePokemonRoute = ComparePokemonRouteImport.update({
   id: '/$pokemon',
@@ -58,17 +70,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$name': typeof NameRoute
   '/compare': typeof CompareRouteWithChildren
-  '/team': typeof TeamRoute
+  '/team': typeof TeamRouteWithChildren
   '/compare/$pokemon': typeof ComparePokemonRouteWithChildren
+  '/team/view': typeof TeamViewRoute
   '/compare/': typeof CompareIndexRoute
+  '/team/': typeof TeamIndexRoute
   '/compare/$pokemon/vs/$opponent': typeof ComparePokemonVsOpponentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$name': typeof NameRoute
-  '/team': typeof TeamRoute
   '/compare/$pokemon': typeof ComparePokemonRouteWithChildren
+  '/team/view': typeof TeamViewRoute
   '/compare': typeof CompareIndexRoute
+  '/team': typeof TeamIndexRoute
   '/compare/$pokemon/vs/$opponent': typeof ComparePokemonVsOpponentRoute
 }
 export interface FileRoutesById {
@@ -76,9 +91,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$name': typeof NameRoute
   '/compare': typeof CompareRouteWithChildren
-  '/team': typeof TeamRoute
+  '/team': typeof TeamRouteWithChildren
   '/compare/$pokemon': typeof ComparePokemonRouteWithChildren
+  '/team/view': typeof TeamViewRoute
   '/compare/': typeof CompareIndexRoute
+  '/team/': typeof TeamIndexRoute
   '/compare/$pokemon/vs/$opponent': typeof ComparePokemonVsOpponentRoute
 }
 export interface FileRouteTypes {
@@ -89,15 +106,18 @@ export interface FileRouteTypes {
     | '/compare'
     | '/team'
     | '/compare/$pokemon'
+    | '/team/view'
     | '/compare/'
+    | '/team/'
     | '/compare/$pokemon/vs/$opponent'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/$name'
-    | '/team'
     | '/compare/$pokemon'
+    | '/team/view'
     | '/compare'
+    | '/team'
     | '/compare/$pokemon/vs/$opponent'
   id:
     | '__root__'
@@ -106,7 +126,9 @@ export interface FileRouteTypes {
     | '/compare'
     | '/team'
     | '/compare/$pokemon'
+    | '/team/view'
     | '/compare/'
+    | '/team/'
     | '/compare/$pokemon/vs/$opponent'
   fileRoutesById: FileRoutesById
 }
@@ -114,7 +136,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NameRoute: typeof NameRoute
   CompareRoute: typeof CompareRouteWithChildren
-  TeamRoute: typeof TeamRoute
+  TeamRoute: typeof TeamRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -147,12 +169,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/team/': {
+      id: '/team/'
+      path: '/'
+      fullPath: '/team/'
+      preLoaderRoute: typeof TeamIndexRouteImport
+      parentRoute: typeof TeamRoute
+    }
     '/compare/': {
       id: '/compare/'
       path: '/'
       fullPath: '/compare/'
       preLoaderRoute: typeof CompareIndexRouteImport
       parentRoute: typeof CompareRoute
+    }
+    '/team/view': {
+      id: '/team/view'
+      path: '/view'
+      fullPath: '/team/view'
+      preLoaderRoute: typeof TeamViewRouteImport
+      parentRoute: typeof TeamRoute
     }
     '/compare/$pokemon': {
       id: '/compare/$pokemon'
@@ -196,11 +232,23 @@ const CompareRouteChildren: CompareRouteChildren = {
 const CompareRouteWithChildren =
   CompareRoute._addFileChildren(CompareRouteChildren)
 
+interface TeamRouteChildren {
+  TeamViewRoute: typeof TeamViewRoute
+  TeamIndexRoute: typeof TeamIndexRoute
+}
+
+const TeamRouteChildren: TeamRouteChildren = {
+  TeamViewRoute: TeamViewRoute,
+  TeamIndexRoute: TeamIndexRoute,
+}
+
+const TeamRouteWithChildren = TeamRoute._addFileChildren(TeamRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NameRoute: NameRoute,
   CompareRoute: CompareRouteWithChildren,
-  TeamRoute: TeamRoute,
+  TeamRoute: TeamRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

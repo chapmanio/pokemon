@@ -43,7 +43,7 @@ export function usePokemonList() {
   );
 
   const { data: pokedexList } = useQuery({
-    queryKey: ["pokedex", regionValue, regionSlugs],
+    queryKey: ["pokedex", regionValue, regionSlugs.join(",")],
     queryFn: () => Promise.all(regionSlugs.map((slug) => fetchPokedex(slug))),
     enabled: !!regionValue && regionSlugs.length > 0,
   });
