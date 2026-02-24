@@ -8,9 +8,11 @@ interface PokemonCardProps {
   /** Default: link to Pokédex detail. Override to e.g. link to compare. */
   to?: string;
   params?: Record<string, string>;
+  /** Called when the link is clicked, before navigation (e.g. to save scroll position). */
+  onBeforeNavigate?: () => void;
 }
 
-export function PokemonCard({ pokemon, size = "md", to = "/$name", params }: PokemonCardProps) {
+export function PokemonCard({ pokemon, size = "md", to = "/$name", params, onBeforeNavigate }: PokemonCardProps) {
   const img =
     pokemon.sprites.other?.["official-artwork"]?.front_default ??
     pokemon.sprites.front_default ?? "";
@@ -23,6 +25,7 @@ export function PokemonCard({ pokemon, size = "md", to = "/$name", params }: Pok
       to={to as "/$name"}
       params={linkParams as { name: string }}
       className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md active:bg-slate-50 transition-colors min-h-[72px]"
+      onClick={() => onBeforeNavigate?.()}
     >
       <img
         src={img}

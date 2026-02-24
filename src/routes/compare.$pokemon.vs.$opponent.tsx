@@ -67,18 +67,28 @@ function CompareHeadToHeadPage() {
   const unfavoured = chanceA <= 45;
 
   const imgA =
-    pokemonA.sprites.other?.["official-artwork"]?.front_default ?? pokemonA.sprites.front_default ?? "";
+    pokemonA.sprites.other?.["official-artwork"]?.front_default ??
+    pokemonA.sprites.front_default ??
+    "";
   const imgB =
-    pokemonB.sprites.other?.["official-artwork"]?.front_default ?? pokemonB.sprites.front_default ?? "";
+    pokemonB.sprites.other?.["official-artwork"]?.front_default ??
+    pokemonB.sprites.front_default ??
+    "";
   const flavorA =
-    speciesA?.flavor_text_entries?.find((e) => e.language.name === "en")?.flavor_text ?? "";
+    speciesA?.flavor_text_entries?.find((e) => e.language.name === "en")
+      ?.flavor_text ?? "";
   const flavorB =
-    speciesB?.flavor_text_entries?.find((e) => e.language.name === "en")?.flavor_text ?? "";
+    speciesB?.flavor_text_entries?.find((e) => e.language.name === "en")
+      ?.flavor_text ?? "";
 
-  const scoreColor = favoured ? "text-green-600" : unfavoured ? "text-red-600" : "text-foreground";
+  const scoreColor = favoured
+    ? "text-green-600"
+    : unfavoured
+      ? "text-red-600"
+      : "text-foreground";
 
   return (
-    <div className="space-y-6 mt-6">
+    <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-stretch max-w-4xl">
         <Card className="relative">
           <Button
@@ -104,7 +114,9 @@ function CompareHeadToHeadPage() {
         </Card>
 
         <div className="flex flex-col items-center justify-center gap-1 min-w-[80px]">
-          <p className={`text-3xl font-bold tabular-nums ${scoreColor}`}>{chanceA}%</p>
+          <p className={`text-3xl font-bold tabular-nums ${scoreColor}`}>
+            {chanceA}%
+          </p>
           <p className="text-xs text-muted-foreground">chance of defeating</p>
         </div>
 
@@ -114,7 +126,9 @@ function CompareHeadToHeadPage() {
             size="icon"
             className="absolute top-2 right-2 z-10 size-8 shrink-0 rounded-full text-muted-foreground hover:text-foreground"
             aria-label="Change opponent (back to compare list)"
-            onClick={() => navigate({ to: "/compare/$pokemon", params: { pokemon: nameA } })}
+            onClick={() =>
+              navigate({ to: "/compare/$pokemon", params: { pokemon: nameA } })
+            }
           >
             <X className="size-4" />
           </Button>
@@ -142,7 +156,14 @@ function CompareHeadToHeadPage() {
   );
 }
 
-const statNames = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"] as const;
+const statNames = [
+  "hp",
+  "attack",
+  "defense",
+  "special-attack",
+  "special-defense",
+  "speed",
+] as const;
 const statLabels: Record<string, string> = {
   hp: "HP",
   attack: "Attack",
@@ -158,19 +179,40 @@ function StatsComparison({
   pokemonA,
   pokemonB,
 }: {
-  pokemonA: { name: string; stats: { base_stat: number; stat: { name: string } }[] };
-  pokemonB: { name: string; stats: { base_stat: number; stat: { name: string } }[] };
+  pokemonA: {
+    name: string;
+    stats: { base_stat: number; stat: { name: string } }[];
+  };
+  pokemonB: {
+    name: string;
+    stats: { base_stat: number; stat: { name: string } }[];
+  };
 }) {
   return (
     <section>
       <h3 className="text-base font-semibold mb-2">
-        Stats <span className="text-muted-foreground font-normal text-sm">(base stat, max {maxStat})</span>
+        Stats{" "}
+        <span className="text-muted-foreground font-normal text-sm">
+          (base stat, max {maxStat})
+        </span>
       </h3>
-      <div className="grid gap-2 items-center" style={{ gridTemplateColumns: "6rem 2.5rem 1fr 1fr" }}>
+      <div
+        className="grid gap-2 items-center"
+        style={{ gridTemplateColumns: "6rem 2.5rem 1fr 1fr" }}
+      >
         <span className="text-sm text-muted-foreground" />
-        <span className="text-xs text-muted-foreground text-right tabular-nums" title="Your Pokémon vs opponent">±</span>
-        <span className="text-sm font-medium capitalize truncate">{pokemonA.name}</span>
-        <span className="text-sm font-medium capitalize truncate">{pokemonB.name}</span>
+        <span
+          className="text-xs text-muted-foreground text-right tabular-nums"
+          title="Your Pokémon vs opponent"
+        >
+          ±
+        </span>
+        <span className="text-sm font-medium capitalize truncate">
+          {pokemonA.name}
+        </span>
+        <span className="text-sm font-medium capitalize truncate">
+          {pokemonB.name}
+        </span>
         {statNames.map((name) => {
           const valA = getStat(pokemonA, name);
           const valB = getStat(pokemonB, name);
@@ -201,11 +243,19 @@ function StatsRow({
   const pctA = (valueA / maxStat) * 100;
   const pctB = (valueB / maxStat) * 100;
   const diffStr = diff > 0 ? `+${diff}` : diff < 0 ? String(diff) : "0";
-  const diffClass = diff > 0 ? "text-green-600" : diff < 0 ? "text-red-600" : "text-muted-foreground";
+  const diffClass =
+    diff > 0
+      ? "text-green-600"
+      : diff < 0
+        ? "text-red-600"
+        : "text-muted-foreground";
   return (
     <>
       <span className="text-sm text-muted-foreground shrink-0">{label}</span>
-      <span className={`text-xs font-medium tabular-nums text-right shrink-0 ${diffClass}`} title="Your Pokémon vs opponent">
+      <span
+        className={`text-xs font-medium tabular-nums text-right shrink-0 ${diffClass}`}
+        title="Your Pokémon vs opponent"
+      >
         {diffStr}
       </span>
       <div className="flex items-center gap-2 min-w-0">
@@ -215,7 +265,9 @@ function StatsRow({
             style={{ width: `${pctA}%` }}
           />
         </div>
-        <span className="text-sm font-medium tabular-nums w-8 shrink-0">{valueA}</span>
+        <span className="text-sm font-medium tabular-nums w-8 shrink-0">
+          {valueA}
+        </span>
       </div>
       <div className="flex items-center gap-2 min-w-0">
         <div className="flex-1 h-4 bg-muted rounded-full overflow-hidden min-w-0">
@@ -224,7 +276,9 @@ function StatsRow({
             style={{ width: `${pctB}%` }}
           />
         </div>
-        <span className="text-sm font-medium tabular-nums w-8 shrink-0">{valueB}</span>
+        <span className="text-sm font-medium tabular-nums w-8 shrink-0">
+          {valueB}
+        </span>
       </div>
     </>
   );
@@ -246,7 +300,13 @@ function SuperEffectiveMoves({
     enabled: moveNames.length > 0,
   });
 
-  type MoveRow = { name: string; type: string; power: number | null; pp: number | null; accuracy: number | null };
+  type MoveRow = {
+    name: string;
+    type: string;
+    power: number | null;
+    pp: number | null;
+    accuracy: number | null;
+  };
 
   const movesByType = useMemo(() => {
     if (!queries.data) return new Map<string, MoveRow[]>();
@@ -254,7 +314,11 @@ function SuperEffectiveMoves({
     for (let i = 0; i < queries.data.length; i++) {
       const move = queries.data[i];
       if (!move?.type?.name) continue;
-      const mult = getDefenderMultiplier(move.type.name, defenderTypes, typeChart);
+      const mult = getDefenderMultiplier(
+        move.type.name,
+        defenderTypes,
+        typeChart
+      );
       if (mult > 1) {
         const row: MoveRow = {
           name: move.name ?? moveNames[i] ?? "",
@@ -275,8 +339,24 @@ function SuperEffectiveMoves({
   }, [queries.data, moveNames, defenderTypes, typeChart]);
 
   const typeOrder = [
-    "normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison",
-    "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy",
+    "normal",
+    "fire",
+    "water",
+    "electric",
+    "grass",
+    "ice",
+    "fighting",
+    "poison",
+    "ground",
+    "flying",
+    "psychic",
+    "bug",
+    "rock",
+    "ghost",
+    "dragon",
+    "dark",
+    "steel",
+    "fairy",
   ];
   const types = useMemo(() => {
     const keys = Array.from(movesByType.keys());
@@ -327,7 +407,9 @@ function SuperEffectiveMoves({
     >
       {label}
       {sortColumn === col && (
-        <span className="ml-0.5 text-muted-foreground">{sortDirection === "asc" ? "↑" : "↓"}</span>
+        <span className="ml-0.5 text-muted-foreground">
+          {sortDirection === "asc" ? "↑" : "↓"}
+        </span>
       )}
     </button>
   );
@@ -340,7 +422,8 @@ function SuperEffectiveMoves({
           onClick={() => handleSort("name")}
           className="min-w-0 flex-1 text-left hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring rounded"
         >
-          Move{sortColumn === "name" ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
+          Move
+          {sortColumn === "name" ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
         </button>
         <SortHeader col="power" label="Power" className="w-10" />
         <SortHeader col="pp" label="PP" className="w-8" />
@@ -349,7 +432,9 @@ function SuperEffectiveMoves({
       <ul className="space-y-1">
         {sortMoves(movesByType.get(typeKey) ?? []).map((m) => (
           <li key={m.name} className="flex items-center gap-4 text-sm">
-            <span className="capitalize min-w-0 flex-1">{m.name.replace(/-/g, " ")}</span>
+            <span className="capitalize min-w-0 flex-1">
+              {m.name.replace(/-/g, " ")}
+            </span>
             <span className="text-muted-foreground tabular-nums w-10 text-right shrink-0">
               {m.power != null ? m.power : "—"}
             </span>
@@ -378,7 +463,9 @@ function SuperEffectiveMoves({
     return (
       <section>
         <h3 className="text-base font-semibold mb-2">Super effective moves</h3>
-        <p className="text-muted-foreground text-sm">No super effective moves.</p>
+        <p className="text-muted-foreground text-sm">
+          No super effective moves.
+        </p>
       </section>
     );
   }
@@ -394,7 +481,11 @@ function SuperEffectiveMoves({
         <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="flex flex-nowrap overflow-x-auto h-auto gap-1 p-1 w-full justify-start">
             {types.map((typeKey) => (
-              <TabsTrigger key={typeKey} value={typeKey} className="capitalize text-xs">
+              <TabsTrigger
+                key={typeKey}
+                value={typeKey}
+                className="capitalize text-xs"
+              >
                 {typeKey}
               </TabsTrigger>
             ))}

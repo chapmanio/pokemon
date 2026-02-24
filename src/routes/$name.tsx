@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPokemon } from "@/entities/pokemon/api/fetchPokemon";
 import { fetchPokemonSpecies } from "@/entities/pokemon/api/fetchPokemonSpecies";
@@ -20,6 +20,11 @@ export const Route = createFileRoute("/$name")({
 
 function PokedexEntry() {
   const { name } = Route.useParams();
+
+  // Scroll the main container to top when viewing a (possibly new) Pokémon so we don't stay mid-page.
+  useEffect(() => {
+    document.getElementById("main-scroll")?.scrollTo(0, 0);
+  }, [name]);
 
   const { data: pokemon, isLoading: pokemonLoading } = useQuery({
     queryKey: ["pokemon", name],

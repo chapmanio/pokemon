@@ -62,7 +62,10 @@ function TeamIndexPage() {
           ))
         )}
         {hasMore && visible.length > 0 && (
-          <div ref={lastItemRef} className="py-4 text-center text-slate-500 text-sm">
+          <div
+            ref={lastItemRef}
+            className="py-4 text-center text-slate-500 text-sm"
+          >
             Loading more…
           </div>
         )}
@@ -70,11 +73,11 @@ function TeamIndexPage() {
       </div>
 
       {team.length > 0 && (
-        <div className="fixed left-1/2 -translate-x-1/2 bottom-20 z-10">
+        <div className="fixed left-1/2 -translate-x-1/2 bottom-16 z-10">
           <button
             type="button"
             onClick={() => navigate({ to: "/team/view" })}
-            className="rounded-full bg-red-600 px-6 py-3 text-white font-semibold shadow-lg hover:bg-red-500 active:bg-red-700 transition-colors"
+            className="rounded-full bg-red-600 px-6 py-2.5 text-white font-semibold shadow-lg hover:bg-red-500 active:bg-red-700 transition-colors"
             aria-label={`View team, ${team.length} Pokémon selected`}
           >
             View Team ({team.length})

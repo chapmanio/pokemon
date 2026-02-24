@@ -27,10 +27,23 @@ function matchesPokedexSpecies(pokemonName: string, speciesNames: Set<string>): 
 
 export { POKEDEX_REGIONS, PAGE_SIZE };
 
-export function usePokemonList() {
-  const [search, setSearch] = useState("");
-  const [regionValue, setRegionValue] = useState("");
+export type UsePokemonListOptions = {
+  /** When provided, search is controlled by the parent (e.g. from URL). */
+  search?: string;
+  setSearch?: (value: string) => void;
+  regionValue?: string;
+  setRegionValue?: (value: string) => void;
+};
+
+export function usePokemonList(options?: UsePokemonListOptions) {
+  const [internalSearch, setInternalSearch] = useState("");
+  const [internalRegionValue, setInternalRegionValue] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  const search = options?.search ?? internalSearch;
+  const setSearch = options?.setSearch ?? setInternalSearch;
+  const regionValue = options?.regionValue ?? internalRegionValue;
+  const setRegionValue = options?.setRegionValue ?? setInternalRegionValue;
 
   const { data: list, isLoading } = useQuery({
     queryKey: ["pokemonList"],

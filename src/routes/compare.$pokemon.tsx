@@ -5,6 +5,7 @@ import {
   Link,
   useRouterState,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPokemon } from "@/entities/pokemon/api/fetchPokemon";
 import { fetchPokemonSpecies } from "@/entities/pokemon/api/fetchPokemonSpecies";
@@ -15,6 +16,11 @@ import { TYPE_COLORS } from "@/shared/config/typeColors";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  restoreScrollPosition,
+  saveScrollPosition,
+  scrollMainToTop,
+} from "@/shared/lib/scrollRestore";
 
 export const Route = createFileRoute("/compare/$pokemon")({
   component: ComparePokemonPage,
@@ -25,6 +31,19 @@ function ComparePokemonPage() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isVsPage = pathname.includes("/vs/");
+
+  const comparePokemonPath = `/compare/${selectedName}`;
+
+  useEffect(() => {
+    if (isVsPage) return;
+    const restored = restoreScrollPosition(comparePokemonPath);
+    if (!restored) scrollMainToTop();
+  }, [comparePokemonPath, isVsPage]);
+
+  useEffect(() => {
+    if (isVsPage) return;
+    return () => saveScrollPosition(comparePokemonPath);
+  }, [comparePokemonPath, isVsPage]);
 
   const { data: pokemonA } = useQuery({
     queryKey: ["pokemon", selectedName],
@@ -106,12 +125,13 @@ function ComparePokemonPage() {
                 <CompareListRow
                   key={entry.name}
                   name={entry.name}
-                  onCompare={() =>
+                  onCompare={() => {
+                    saveScrollPosition(comparePokemonPath);
                     navigate({
                       to: "/compare/$pokemon/vs/$opponent",
                       params: { pokemon: selectedName, opponent: entry.name },
-                    })
-                  }
+                    });
+                  }}
                 />
               ))
             )}
