@@ -24,16 +24,24 @@ function PokedexHome() {
   } = usePokemonList();
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-lg font-semibold mb-3">Pokédex</h2>
-      <PokemonListFilters
-        search={search}
-        setSearch={setSearch}
-        regionValue={regionValue}
-        setRegionValue={setRegionValue}
-        resetVisible={resetVisible}
-      />
-      <div className="mt-4 space-y-2">
+    <div className="max-w-2xl mx-auto px-4">
+      {/* Fixed bar so it stays visible below the red header; spacer reserves space in the scroll flow */}
+      <div
+        className="fixed left-0 right-0 top-13 z-10 border-b border-slate-200/80 bg-slate-50 py-2"
+        style={{ height: "5.5rem" }}
+      >
+        <div className="mx-auto max-w-2xl px-4">
+          <PokemonListFilters
+            search={search}
+            setSearch={setSearch}
+            regionValue={regionValue}
+            setRegionValue={setRegionValue}
+            resetVisible={resetVisible}
+          />
+        </div>
+      </div>
+      <div className="h-19" aria-hidden />
+      <div className="space-y-2 py-4">
         {regionLoading ? (
           <p className="text-slate-500 text-sm">Loading region…</p>
         ) : isLoading ? (
@@ -44,7 +52,10 @@ function PokedexHome() {
           ))
         )}
         {hasMore && visible.length > 0 && (
-          <div ref={lastItemRef} className="py-4 text-center text-slate-500 text-sm">
+          <div
+            ref={lastItemRef}
+            className="py-4 text-center text-slate-500 text-sm"
+          >
             Loading more…
           </div>
         )}

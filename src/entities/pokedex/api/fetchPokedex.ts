@@ -24,7 +24,7 @@ export function fetchPokedex(idOrName: string | number): Promise<PokedexApiRespo
 
 /** Grouped regional dexes: same label prefix → one dropdown option, multiple API slugs merged. */
 const POKEDEX_REGIONS_GROUPED: { value: string; label: string; slugs: string[] }[] = [
-  { value: "", label: "All", slugs: [] },
+  { value: "", label: "All Regions", slugs: [] },
   { value: "national", label: "National", slugs: ["national"] },
   { value: "kanto", label: "Kanto", slugs: ["kanto"] },
   { value: "johto", label: "Johto", slugs: ["original-johto", "updated-johto"] },

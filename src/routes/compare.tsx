@@ -7,7 +7,6 @@ export const Route = createFileRoute("/compare")({
 function CompareLayout() {
   return (
     <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-lg font-semibold mb-4">Head-to-Head</h2>
       <Outlet />
     </div>
   );

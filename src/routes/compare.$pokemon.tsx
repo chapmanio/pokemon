@@ -1,4 +1,10 @@
-import { createFileRoute, Outlet, useNavigate, Link, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  useNavigate,
+  Link,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPokemon } from "@/entities/pokemon/api/fetchPokemon";
 import { fetchPokemonSpecies } from "@/entities/pokemon/api/fetchPokemonSpecies";
@@ -48,7 +54,8 @@ function ComparePokemonPage() {
     pokemonA?.sprites.front_default ??
     "";
   const flavorA =
-    speciesA?.flavor_text_entries?.find((e) => e.language.name === "en")?.flavor_text ?? "";
+    speciesA?.flavor_text_entries?.find((e) => e.language.name === "en")
+      ?.flavor_text ?? "";
 
   // On the vs page, render only the head-to-head content (no list/search).
   if (isVsPage) {
@@ -61,6 +68,21 @@ function ComparePokemonPage() {
         <p className="text-slate-500">Loading…</p>
       ) : (
         <div className="space-y-4">
+          <div
+            className="fixed left-0 right-0 top-13 z-10 border-b border-slate-200/80 bg-slate-50 py-2"
+            style={{ height: "5.5rem" }}
+          >
+            <div className="mx-auto max-w-2xl px-4">
+              <PokemonListFilters
+                search={search}
+                setSearch={setSearch}
+                regionValue={regionValue}
+                setRegionValue={setRegionValue}
+                resetVisible={resetVisible}
+              />
+            </div>
+          </div>
+          <div className="h-18" aria-hidden />
           <PokemonDetailHeader
             name={pokemonA.name}
             imgSrc={imgA}
@@ -74,13 +96,6 @@ function ComparePokemonPage() {
           <p className="text-muted-foreground text-sm">
             Choose an opponent to compare.
           </p>
-          <PokemonListFilters
-            search={search}
-            setSearch={setSearch}
-            regionValue={regionValue}
-            setRegionValue={setRegionValue}
-            resetVisible={resetVisible}
-          />
           <div className="space-y-2">
             {regionLoading ? (
               <p className="text-slate-500 text-sm">Loading region…</p>
@@ -101,7 +116,10 @@ function ComparePokemonPage() {
               ))
             )}
             {hasMore && visible.length > 0 && (
-              <div ref={lastItemRef} className="py-4 text-center text-slate-500 text-sm">
+              <div
+                ref={lastItemRef}
+                className="py-4 text-center text-slate-500 text-sm"
+              >
                 Loading more…
               </div>
             )}
@@ -149,13 +167,18 @@ function CompareListRow({
                   key={t.type.name}
                   variant="secondary"
                   className="text-xs capitalize border-0"
-                  style={{ backgroundColor: TYPE_COLORS[t.type.name] ?? "#94a3b8", color: "white" }}
+                  style={{
+                    backgroundColor: TYPE_COLORS[t.type.name] ?? "#94a3b8",
+                    color: "white",
+                  }}
                 >
                   {t.type.name}
                 </Badge>
               ))}
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">#{String(pokemon.id).padStart(3, "0")}</p>
+            <p className="text-xs text-slate-500 mt-0.5">
+              #{String(pokemon.id).padStart(3, "0")}
+            </p>
             <Link
               to="/$name"
               params={{ name: pokemon.name }}

@@ -25,17 +25,25 @@ function CompareIndexPage() {
 
   return (
     <div className="space-y-4">
+      <div
+        className="fixed left-0 right-0 top-13 z-10 border-b border-slate-200/80 bg-slate-50 py-2"
+        style={{ height: "5.5rem" }}
+      >
+        <div className="mx-auto max-w-2xl px-4">
+          <PokemonListFilters
+            search={search}
+            setSearch={setSearch}
+            regionValue={regionValue}
+            setRegionValue={setRegionValue}
+            resetVisible={resetVisible}
+          />
+        </div>
+      </div>
+      <div className="h-16.5" aria-hidden />
       <p className="text-muted-foreground text-sm">
         Select a Pokémon to compare head-to-head with another.
       </p>
-      <PokemonListFilters
-        search={search}
-        setSearch={setSearch}
-        regionValue={regionValue}
-        setRegionValue={setRegionValue}
-        resetVisible={resetVisible}
-      />
-      <div className="mt-4 space-y-2">
+      <div className="space-y-2">
         {regionLoading ? (
           <p className="text-slate-500 text-sm">Loading region…</p>
         ) : isLoading ? (
@@ -46,7 +54,10 @@ function CompareIndexPage() {
           ))
         )}
         {hasMore && visible.length > 0 && (
-          <div ref={lastItemRef} className="py-4 text-center text-slate-500 text-sm">
+          <div
+            ref={lastItemRef}
+            className="py-4 text-center text-slate-500 text-sm"
+          >
             Loading more…
           </div>
         )}

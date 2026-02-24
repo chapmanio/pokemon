@@ -1,4 +1,9 @@
-import { createRootRouteWithContext, Outlet, Link, useRouterState } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Outlet,
+  Link,
+  useRouterState,
+} from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
 export const Route = createRootRouteWithContext()({
@@ -11,7 +16,11 @@ function RootLayout() {
   const { location } = useRouterState();
   const path = location.pathname;
 
-  const isPokedex = path === "/" || (path.startsWith("/") && path.split("/").filter(Boolean).length === 1 && !["compare", "team"].includes(path.slice(1)));
+  const isPokedex =
+    path === "/" ||
+    (path.startsWith("/") &&
+      path.split("/").filter(Boolean).length === 1 &&
+      !["compare", "team"].includes(path.slice(1)));
   const isCompare = path.startsWith("/compare");
   const isTeam = path.startsWith("/team");
 
@@ -24,18 +33,23 @@ function RootLayout() {
 
   return (
     <div className="min-h-dvh flex flex-col bg-white">
-      <header className="fixed top-0 left-0 right-0 z-10 bg-red-600 text-white px-4 py-3 shadow-sm flex items-center gap-3">
+      <header className="fixed top-0 left-0 right-0 z-20 bg-red-600 text-white px-4 py-3 shadow-sm flex items-center gap-3">
         {showBack && (
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="p-1 -ml-1 rounded-md hover:bg-red-500/80 transition-colors"
+            className="-ml-1 rounded-md hover:bg-red-500/80 transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="size-6" />
           </button>
         )}
         <h1 className="text-xl font-bold tracking-tight flex-1">PokéAssist</h1>
+        <span className="text-white/90 text-sm font-medium">
+          {isPokedex && "Pokédex"}
+          {isCompare && "Compare"}
+          {isTeam && "Team"}
+        </span>
       </header>
 
       <main className="flex-1 overflow-y-auto pt-14 pb-16 bg-slate-50">
