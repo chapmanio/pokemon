@@ -151,7 +151,7 @@ function CompareListRow({
     "";
 
   return (
-    <Card>
+    <Card className="py-0">
       <CardContent className="flex items-center justify-between gap-2 p-3">
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <img

@@ -5,7 +5,7 @@ import { fetchPokemon } from "@/entities/pokemon/api/fetchPokemon";
 import { fetchPokemonSpecies } from "@/entities/pokemon/api/fetchPokemonSpecies";
 import { fetchType } from "@/entities/type/api/fetchType";
 import { fetchMove } from "@/entities/move/api/fetchMove";
-import { matchupScore, getStat } from "@/shared/lib/matchupScore";
+import { chanceToDefeat, getStat } from "@/shared/lib/matchupScore";
 import { getDefenderMultiplier } from "@/shared/lib/typeEffectiveness";
 import type { TypeApiResponse } from "@/shared/lib/typeEffectiveness";
 import { PokemonDetailHeader } from "@/features/pokemon-detail/PokemonDetailHeader";
@@ -61,12 +61,8 @@ function CompareHeadToHeadPage() {
     return <p className="text-slate-500">Loading…</p>;
   }
 
-  // Compute both directions and normalize so the two views sum to 100%
-  // matchupScore(a,b) = how favoured b is vs a
-  const scoreAB = matchupScore(pokemonA, pokemonB, typeData); // B favoured vs A
-  const scoreBA = matchupScore(pokemonB, pokemonA, typeData);  // A favoured vs B
-  const total = scoreAB + scoreBA;
-  const chanceA = total > 0 ? Math.round((100 * scoreBA) / total) : 50;
+  // Chance A defeats B from offensive pressure: atk × type effectiveness / def each way
+  const chanceA = chanceToDefeat(pokemonA, pokemonB, typeData);
   const favoured = chanceA >= 55;
   const unfavoured = chanceA <= 45;
 
